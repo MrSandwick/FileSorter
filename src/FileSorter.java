@@ -3,7 +3,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
-public class FileSorter{
+public class FileSorter {
     
     // A map to store patterns and their corresponding folders
     private static Map<String, String> namePatterns = new HashMap<>();
@@ -22,6 +22,8 @@ public class FileSorter{
         // Get all files from the repository
         File directory = new File(repositoryPath);
         File[] files = directory.listFiles();
+        
+        boolean filesMoved = false; // Flag to track if any files were moved
         
         if (files != null) {
             for (File file : files) {
@@ -48,6 +50,7 @@ public class FileSorter{
                             try {
                                 Files.move(sourcePath, destinationPath, StandardCopyOption.REPLACE_EXISTING);
                                 System.out.println("File moved: " + fileName + " -> " + folderName);
+                                filesMoved = true; // Mark that a file has been moved
                             } catch (IOException e) {
                                 System.err.println("Error moving file: " + fileName);
                                 e.printStackTrace();
@@ -56,6 +59,11 @@ public class FileSorter{
                         }
                     }
                 }
+            }
+            
+            // If no files were moved, print a message
+            if (!filesMoved) {
+                System.out.println("No files matching the specified patterns were found.");
             }
         } else {
             System.out.println("No files found in the specified directory.");
